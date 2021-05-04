@@ -3,6 +3,9 @@ module DependencyManager
   # list. Checks for potential missing dependencies and reconciles against
   # optional and required dependencies.
   class Resolver
+    # If dependencies are not present
+    class MissingDependencies < ArgumentError; end
+
     # Creates a new Resolver
     #
     # @param factory: [Factory]
@@ -19,7 +22,7 @@ module DependencyManager
 
     # Resolves dependencies from the currently loaded dependencies
     #
-    # @raise [ArgumentError]
+    # @raise [MissingDependencies]
     #   When there are missing dependencies required by the current factory
     #   that will prevent the factory from building
     #
@@ -37,7 +40,7 @@ module DependencyManager
 
       if missing_dependencies.any?
         error = missing_dependencies.join(', ')
-        raise ArgumentError, "Dependencies for `#{@factory.const_name}` are not present: #{error}"
+        raise MissingDependencies, "Dependencies for `#{@factory.const_name}` are not present: #{error}"
       end
 
       resolved_dependencies

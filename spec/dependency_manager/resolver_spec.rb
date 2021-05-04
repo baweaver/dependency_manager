@@ -36,7 +36,7 @@ RSpec.describe DependencyManager::Resolver do
 
       it 'will fail and warn the user of missing dependencies' do
         error = "Dependencies for `FlagsFactory` are not present: timing"
-        expect { subject.resolve }.to raise_error(ArgumentError, error)
+        expect { subject.resolve }.to raise_error(described_class::MissingDependencies, error)
       end
     end
   end

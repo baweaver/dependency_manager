@@ -5,7 +5,7 @@ RSpec.describe DependencyManager do
     expect(DependencyManager::VERSION).not_to be nil
   end
 
-  it "does something useful" do
+  xit "does something useful" do
     container = DependencyManager::Container.new(
       app_context: AppContext.new(
         name: 'Test',

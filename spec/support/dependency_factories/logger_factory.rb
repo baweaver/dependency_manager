@@ -1,7 +1,14 @@
 # Creates a generic Ruby logger with some configuration hooks
 class LoggerFactory < DependencyManager::Factory
+  validate_with do
+    required(:enabled).filled(:bool)
+    required(:level).value(included_in?: %i(warn danger info debug))
+  end
+
   def build
     return false unless enabled?
+
+    validate!
 
     load_requirements
 
@@ -15,9 +22,9 @@ class LoggerFactory < DependencyManager::Factory
 
   def configuration
     @configuration ||= {
-      level: @factory_config.fetch(:level, :warn),
-      out: @factory_config.fetch(:out, STDOUT)
-    }
+      level: :warn,
+      out: STDOUT
+    }.merge!(@factory_config)
   end
 
   def load_requirements

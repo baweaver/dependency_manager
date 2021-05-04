@@ -1,8 +1,40 @@
 # DependencyManager
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/dependency_manager`. To experiment with that code, run `bin/console` for an interactive prompt.
+Dependency Manager using Dependency Injection wire together dependencies into a Service Container.
 
-TODO: Delete this and the text above, and describe your gem
+This tool may be unnecessary for dependency chains with only a few dependencies, but if you find yourself dealing with 20 or more dependencies you need to wire together this will quickly become very useful.
+
+Dependency Manager uses Factories to assemble dependencies, and uses the arguments of `initialize` to figure out what depends on what, and finally what order all the dependencies should be loaded in.
+
+Consider this example factory:
+
+```ruby
+class FlagsFactory < DependencyManager::Factory
+  # ...
+
+  def initialize(logger:, timing:, hype_person: nil, **dependencies)
+    super(**dependencies)
+
+    @logger = logger
+    @timing = timing
+    @hype_person = hype_person
+  end
+
+  # ...
+end
+```
+
+This factory would depend on a `LoggerFactory` and `TimingFactory`, and have an optional dependency on a `HypePerson` factory. The remaining `**dependencies` relate to the base `DependencyManager` factory which we'll get into in a moment.
+
+## Usage
+
+TODO: Write usage instructions here:
+
+1. Overview usage
+2. Base factory
+3. Creating new factories
+4. Validating configurations
+5. Come up with more list items
 
 ## Installation
 
@@ -20,10 +52,6 @@ Or install it yourself as:
 
     $ gem install dependency_manager
 
-## Usage
-
-TODO: Write usage instructions here
-
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
@@ -32,7 +60,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/dependency_manager. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/baweaver/dependency_manager. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 

@@ -37,6 +37,11 @@ end
 #
 # It also uses `timing` as an additional dep, and `hype_person` as an optional
 class FlagsFactory < DependencyManager::Factory
+  validate_with do
+    required(:enabled).filled(:bool)
+    required(:default_values).hash
+  end
+
   def initialize(logger:, timing:, hype_person: nil, **dependencies)
     super(**dependencies)
 
@@ -47,6 +52,8 @@ class FlagsFactory < DependencyManager::Factory
 
   def build
     return unless enabled?
+
+    validate!
 
     load_requirements
 
