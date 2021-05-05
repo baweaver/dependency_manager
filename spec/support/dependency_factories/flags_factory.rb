@@ -60,7 +60,7 @@ class FlagsFactory < DependencyManager::Factory
     Flags.new(
       logger: @logger,
       timing: @timing,
-      default_values: @factory_config[:default_values],
+      default_values: configuration[:default_values],
       hype_person: @hype_person
     )
   end
@@ -71,6 +71,6 @@ class FlagsFactory < DependencyManager::Factory
   end
 
   def enabled?
-    @factory_config[:enabled] == true
+    configuration[:enabled] == true
   end
 end

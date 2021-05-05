@@ -30,6 +30,6 @@ class TimingFactory < DependencyManager::Factory
   end
 
   def enabled?
-    @factory_config[:enabled] == true
+    configuration[:enabled] == true
   end
 end

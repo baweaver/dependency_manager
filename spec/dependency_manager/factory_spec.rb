@@ -113,7 +113,7 @@ RSpec.describe DependencyManager::Factory do
 
   describe '.factories' do
     it 'lists all child factory classes' do
-      expect(described_class.factories).to eq([LoggerFactory, FlagsFactory, TimingFactory, HypePersonFactory])
+      expect(described_class.factories).to eq(Set[LoggerFactory, FlagsFactory, TimingFactory, HypePersonFactory])
     end
   end
 

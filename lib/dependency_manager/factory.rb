@@ -1,4 +1,5 @@
 require 'dependency_manager/config_schema_macros'
+require 'set'
 
 module DependencyManager
   # Base for all other factories, providing interface hints and generic
@@ -48,15 +49,15 @@ module DependencyManager
       #
       # @return [void]
       def inherited(subclass)
-        @factories ||= []
-        @factories << subclass
+        @factories ||= Set.new
+        @factories.add subclass
       end
 
       # Get all available factory names except the Base factory
       #
       # @return [Array[Symbol]]
       def factories
-        @factories || []
+        @factories || Set.new
       end
 
       # Get a factory by its underscored name
@@ -155,14 +156,15 @@ module DependencyManager
 
     # Creates a new Factory.
     #
-    # @param app_context: [AppContext]
-    #   Application context information
+    # @param app_context: nil [AppContext]
+    #   Application context information. Defaulted to `nil` in case users
+    #   do not need this information.
     #
     # @param factory_config: [Hash[Symbol, Any]]
     #   Configuration specific to the factory
     #
     # @return [Factory]
-    def initialize(app_context:, factory_config:)
+    def initialize(app_context: nil, factory_config:)
       @app_context = app_context
       @factory_config = factory_config
     end
@@ -182,7 +184,14 @@ module DependencyManager
     #
     # @raise [Hash[Symbol, Any]]
     def configuration
-      @factory_config
+      @configuration ||= deep_merge(default_configuration, @factory_config)
+    end
+
+    # Default configuration of the Factory
+    #
+    # @return [Hash[Symbol, Any]]
+    def default_configuration
+      {}
     end
 
     # Used to load and require any associated external dependencies.
@@ -206,6 +215,43 @@ module DependencyManager
     # @return [FalseClass] Disabled by default
     def enabled?
       false
+    end
+
+    # Deeply merges two Hashes
+    #
+    # @param a [Hash]
+    #   Original Hash
+    #
+    # @param b [Hash]
+    #   Hash to merge
+    #
+    # @param &fn [Proc[Any, Any, Any]]
+    #   Merging function
+    #
+    # @return [Hash]
+    protected def deep_merge(a, b, &fn)
+      deep_merge!(a.dup, b.dup, &fn)
+    end
+
+    # Destructive merge of two hashes
+    #
+     # @param a [Hash]
+    #   Original Hash
+    #
+    # @param b [Hash]
+    #   Hash to merge
+    #
+    # @param &fn [Proc[Any, Any, Any]]
+    #   Merging function
+    #
+    # @return [Hash]
+    protected def deep_merge!(a, b, &fn)
+      a.merge!(b) do |key, left, right|
+        next deep_merge(left, right, &fn) if left.is_a?(Hash) && right.is_a?(Hash)
+        next fn.call(left, right, &fn) if block_given?
+
+        right
+      end
     end
   end
 end

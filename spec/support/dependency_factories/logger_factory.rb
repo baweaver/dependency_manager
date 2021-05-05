@@ -12,19 +12,17 @@ class LoggerFactory < DependencyManager::Factory
 
     load_requirements
 
-    Logger.new(configuration[:out]).tap do |logger|
-      logger.level = configuration.fetch(:level, :warn)
-      logger.formatter = proc do |severity, datetime, progname, msg|
+    Logger.new(
+      configuration[:out],
+      level: configuration[:level],
+      formatter: proc { |severity, datetime, progname, msg|
         "[#{datetime}] (#{@app_context.env}/#{@app_context.name}) #{severity} -- #{msg}\n"
-      end
-    end
+      }
+    )
   end
 
-  def configuration
-    @configuration ||= {
-      level: :warn,
-      out: STDOUT
-    }.merge!(@factory_config)
+  def default_configuration
+    { level: :warn, out: STDOUT }
   end
 
   def load_requirements
@@ -32,6 +30,6 @@ class LoggerFactory < DependencyManager::Factory
   end
 
   def enabled?
-    @factory_config[:enabled] == true
+    configuration[:enabled] == true
   end
 end

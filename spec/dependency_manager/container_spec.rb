@@ -32,7 +32,7 @@ RSpec.describe DependencyManager::Container do
 
     describe '#register' do
       it 'can register a new factory' do
-        expect(subject.register(TimingFactory)).to eq([LoggerFactory, FlagsFactory, HypePersonFactory, TimingFactory])
+        expect(subject.register(TimingFactory)).to eq(Set[LoggerFactory, FlagsFactory, HypePersonFactory, TimingFactory])
       end
 
       it 'can build with the newly registered factory' do

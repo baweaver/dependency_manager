@@ -9,8 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Brandon Weaver"]
   spec.email         = ["keystonelemur@gmail.com"]
 
-  spec.summary       = %q{Manages Dependencies. MAKE - better description}
-  spec.description   = spec.summary
+  spec.summary       = %q{Dependency Management for applications with several dependencies}
+  spec.description   =
+    %q{Manages and loads large collections of dependencies and wraps them into a service container for later consumption}
   spec.homepage      = "https://www.github/com/baweaver/dependency_manager"
   spec.license       = "MIT"
 

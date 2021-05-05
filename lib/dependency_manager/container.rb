@@ -1,3 +1,5 @@
+require 'set'
+
 module DependencyManager
   class Container
     # A container should only be built once
@@ -24,12 +26,8 @@ module DependencyManager
     # @return [Container]
     def initialize(app_context:, configuration:, factories: Factory.factories)
       @app_context = app_context
-
-      # Typically loaded from some form of YAML
       @configuration = configuration
-
-      @factories = factories
-
+      @factories = factories.is_a?(Set) ? factories : Set[*factories]
       @built = false
     end
 
@@ -41,7 +39,7 @@ module DependencyManager
     def register(factory)
       raise AddedFactoryAfterBuildError, "Cannot add Factories after Container has been built" if @built
 
-      @factories << factory
+      @factories.add factory
     end
 
     # Builds all the dependencies from factories
