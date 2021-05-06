@@ -55,7 +55,7 @@ A `Factory` seeks to fulfill a few goals:
 Factories can be enabled or disabled through the `enabled?` method, which defaults to `false` in the `Factory` class which children inherit from:
 
 ```ruby
-class MyFactory > DependencyManager::Factory
+class MyFactory < DependencyManager::Factory
   # ...
 
   def enabled?
@@ -69,7 +69,7 @@ end
 Just defining this method, however, will not do much unless you remember to put it in your build step:
 
 ```ruby
-class MyFactory > DependencyManager::Factory
+class MyFactory < DependencyManager::Factory
   # ...
 
   def build
