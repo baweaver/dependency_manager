@@ -231,7 +231,7 @@ As with other methods it's not necessary unless you need it, and `build` will no
 
 #### Factory Dependency Chains
 
-Dependency chains are the main reason this library exists. In a Service Container dependencies rely on eachother, often times in hard to manage orders. `DependencyManager` solves this using the arguments to the `initialize` function on each `Factory` to find dependencies:
+Dependency chains are the main reason this library exists. In a Service Container dependencies rely on each other, often times in hard to manage orders. `DependencyManager` solves this using the arguments to the `initialize` function on each `Factory` to find dependencies:
 
 ```ruby
 def initialize(logger:, other:, optional: nil)
